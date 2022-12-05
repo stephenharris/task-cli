@@ -1,5 +1,4 @@
-import { getRemoteStorage, Gist, RemoteConfigError, setGist } from "../data/remote";
-import chalk from "chalk"
+import { Gist, setGist } from "../lib/remote";
 import inquirer from 'inquirer'
 
 

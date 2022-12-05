@@ -1,11 +1,11 @@
 import chalk from "chalk"
-import { getTasksWithOrdinal, Task, TaskWithOrdinal } from "../data/tasks";
-import { removeObject, setObject } from "../data/storage";
+import { getTasksWithOrdinal, Task, TaskWithOrdinal } from "../lib/tasks";
+import { removeObject, setObject } from "../lib/storage";
 
 const findTask = (num: number) => {
     const numInt = parseInt(""+num);
     return getTasksWithOrdinal()
-        .then((tasks) => {
+        .then((tasks: TaskWithOrdinal[]) => {
             return tasks.find((task: TaskWithOrdinal) => task.num === numInt)
         })
 }
@@ -13,7 +13,7 @@ const findTask = (num: number) => {
 export const startCommand = (taskNumber: number, options: any, command: any) => {
 
     return findTask(taskNumber)
-        .then((task: Task) =>{
+        .then((task: Task | undefined) =>{
             if (!task) {
                 chalk.red(`Task ${taskNumber} not found.`)
                 return;
@@ -30,7 +30,7 @@ export const startCommand = (taskNumber: number, options: any, command: any) => 
 export const stopCommand = (taskId: number, options: any, command: any) => {
 
     return findTask(taskId)
-        .then((task: Task) =>{
+        .then((task: Task | undefined) =>{
             if (task === undefined) {
                 chalk.red(`Task ${taskId} not found.`)
                 return;
@@ -46,7 +46,7 @@ export const stopCommand = (taskId: number, options: any, command: any) => {
 export const completeCommand = (taskId: number, options: any, command: any) => {
 
     return findTask(taskId)
-        .then((task: Task) =>{
+        .then((task: Task | undefined) =>{
             if (task === undefined) {
                 chalk.red(`Task ${taskId} not found.`)
                 return;
@@ -62,7 +62,7 @@ export const completeCommand = (taskId: number, options: any, command: any) => {
 export const deleteCommand = (taskId: number, options: any, command: any) => {
 
     return findTask(taskId)
-        .then(async (task: Task) =>{
+        .then(async (task: Task | undefined) =>{
             if (task === undefined) {
                 chalk.red(`Task ${taskId} not found.`)
                 return;

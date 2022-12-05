@@ -1,4 +1,4 @@
-import { Task } from "../data/tasks";
+import { Task } from "../lib/tasks";
 import { clientVersion } from "./remote";
 
 export const defaultState = {
