@@ -1,45 +1,19 @@
-import { Gist, setGist } from "../lib/remote";
+import { Gist } from "../lib/gist";
 import inquirer from 'inquirer'
 
 
 export const remoteInitCommand = async (options: any, command: any) => {
 
-  let gist: Gist = {
-    id: "",
-    token: ""
-  }
-
-  let prompts = [];
-
-
-  if(options.gist) {
-    gist.id = options.gist;
-  } else {
-    prompts.push({
-      type: 'string',
-      name: 'id',
-      message: 'Gist Id',
-    })
-  }
-
-  if(options.token) {
-    gist.token = options.token;
-  } else {
-    prompts.push({
-      type: 'string',
-      name: 'token',
-      message: 'GitHub PAC token',
-    })
-  }
+  let prompts = Gist.getConfig().filter((prompt) => options[prompt.name] == undefined )
 
   if (prompts.length > 0) {
     await inquirer.prompt(prompts)
       .then((answer) => {
-        Object.assign(gist, answer);
+        Object.assign(options, answer);
       })
   }
 
-  return setGist(gist).then(() => console.log("Remote configured."));
+  return Gist.persistConig(options.gist, options.token).then(() => console.log("Remote configured."));
 }
 
 

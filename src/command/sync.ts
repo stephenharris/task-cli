@@ -1,14 +1,18 @@
-import { getCachedState, getRemoteStorage, RemoteConfigError, setCachedState, updateRemoteStorage } from "../lib/remote";
+import { Gist } from "../lib/gist";
 import chalk from "chalk"
 import { sync } from "../lib/sync";
 import { getTasks } from "../lib/tasks";
 import { set } from "../lib/storage";
-import { State } from "../lib/remote";
+import { defaultState, State } from "../lib/state";
+import {getCachedState, setCachedState} from "../lib/state"
+import {RemoteConfigError, RemoteStore} from "../lib/remote"
 
-export const syncCommand = (options: any, command: any) => {
+export const syncCommand = async (options: any, command: any) => {
+
+    const store: RemoteStore = await Gist.getStore();
 
     
-    return getRemoteStorage().then((remoteState: State) => {
+    return store.getRemoteState().then((remoteState: State) => {
         return Promise.allSettled([
             getTasks(),
             getCachedState(),
@@ -21,13 +25,13 @@ export const syncCommand = (options: any, command: any) => {
             }
 
             let tasks = result[0].value;
-            let cachedState = result[1].status === "fulfilled" ? result[1].value : null
-            let remoteState = result[2].status === "fulfilled" ? result[2].value : null
+            let cachedState = result[1].status === "fulfilled" ? result[1].value : defaultState
+            let remoteState = result[2].status === "fulfilled" ? result[2].value : defaultState
             
             let newState = await sync(remoteState, cachedState, tasks);
 
             if (remoteState === null || newState.serial === remoteState.serial + 1) {
-              await updateRemoteStorage(newState)
+              await store.setRemoteState(newState)
             }
 
             return setCachedState(newState)

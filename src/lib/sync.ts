@@ -1,5 +1,5 @@
 import { Task } from "../lib/tasks";
-import { clientVersion } from "./remote";
+import { State, clientVersion } from "./state";
 
 export const defaultState = {
     version: 1,
@@ -15,19 +15,19 @@ function deepEqual(x: any, y: any): boolean {
     ) : (x === y);
   }
 
-export function sync(remote: any, cachedState: any, localTasks: any[]) {
+export function sync(remote: State | {}, cachedState: State | {} | null, localTasks: Task[]) {
 
     if (deepEqual(remote, {})) {
         remote = defaultState;
         cachedState = JSON.parse(JSON.stringify(remote))
     }
 
-    if (remote.version > clientVersion){
-        throw Error(`Client version ${clientVersion} not compatible with ${remote.version}. Update client to version ${clientVersion}`)
+    if ((remote as State).version > clientVersion){
+        throw Error(`Client version ${clientVersion} not compatible with ${(remote as State).version}. Update client to version ${clientVersion}`)
     }
 
     let newState = JSON.parse(JSON.stringify(remote));
-    const cachedStateTaskIds =  cachedState.tasks?.map((task: Task) => task.id) || [];
+    const cachedStateTaskIds =  cachedState && (cachedState as State).tasks?.map((task: Task) => task.id) || [];
     const localStateIds =  localTasks?.map((task: Task) => task.id) || [];
 
     let actions = localTasks.reduce((actions, task) => {
@@ -36,15 +36,15 @@ export function sync(remote: any, cachedState: any, localTasks: any[]) {
         
         if ( index === -1) {
             actions.add.push(task)
-        } else if (!deepEqual(task, cachedState.tasks[index])) {
+        } else if (!deepEqual(task, (cachedState as State).tasks[index])) {
             console.log(task);
-            console.log(cachedState.tasks[index]);
+            console.log((cachedState as State).tasks[index]);
             actions.update.push(task)
         }
         return actions;
     }, {
-        add: [],
-        update: [],
+        add: [] as Task[],
+        update: [] as Task[],
         delete: cachedStateTaskIds.filter((cachedTaskId: string) => !localStateIds.includes(cachedTaskId))
     })
 
@@ -55,7 +55,7 @@ export function sync(remote: any, cachedState: any, localTasks: any[]) {
     }
 
     // Update changed tasks
-    const remoteStateIds =  remote.tasks?.map((task: Task) => task.id) || [];
+    const remoteStateIds =  (remote as State).tasks?.map((task: Task) => task.id) || [];
 
     for (let task of actions.update) {
         const index = remoteStateIds.indexOf(task.id);
