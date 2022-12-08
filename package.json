@@ -1,10 +1,10 @@
 {
   "name": "@stephenharris/task-cli",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "",
   "main": "./index.js",
   "bin": {
-    "todo": "./build/entry.sh"
+    "todo": "./entry.sh"
   },
   "type": "module",
   "scripts": {
@@ -12,7 +12,7 @@
     "start:windows": "nodemon --watch 'src/**/*.ts' --exec \"npx ts-node-esgm\" src/index.ts",
     "create": "npm run build && npm run test",
     "build": "tsc -p .  && node scripts/build-package.js",
-    "local": "sudo npm i -g && todo",
+    "local": "npm run build && ./build/entry.sh",
     "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
     "test": "jest"
   },
