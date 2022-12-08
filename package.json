@@ -1,10 +1,10 @@
 {
   "name": "@stephenharris/task-cli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "",
   "main": "./index.js",
   "bin": {
-    "todo": "./index.js"
+    "todo": "./build/entry.sh"
   },
   "type": "module",
   "scripts": {
