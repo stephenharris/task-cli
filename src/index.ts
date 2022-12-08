@@ -2,7 +2,9 @@
 
 
 // todo #!/usr/bin/env node 
+import chalk from "chalk";
 import {Command} from "commander"
+import { exit } from "process";
 import { addCommand } from "./command/add";
 import { listCommmand } from "./command/list";
 import { remoteInitCommand } from "./command/remote-init";
@@ -56,5 +58,7 @@ program
   .argument('task')
   .action(deleteCommand);
 
-
-program.parse();
+program.parseAsync().catch((err: any) => {
+  console.log(chalk.red("ERROR: " + err.message));
+  exit(1);
+});
