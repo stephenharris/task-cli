@@ -27,8 +27,8 @@ program
 
 program
   .command('list')
-  .option('-t, --title <honorific>', 'title to use before name')
-  .option('-d, --debug', 'display some debugging')
+  .option('-d, --due <due>', 'Filter events by due date')
+  .option('-t, --tag <tag>', 'Filter events by tag')
   .action(listCommmand);
 
 program
