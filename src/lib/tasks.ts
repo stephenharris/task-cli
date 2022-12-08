@@ -14,7 +14,7 @@ export interface TaskWithOrdinal extends Task {
 }
 
 export const getTasks = () => {
-  return get("todo").then((tasks) => tasks)
+  return get("todo").then((tasks) => tasks ? tasks : [])
 };
 
 export const getTasksWithOrdinal= () => {

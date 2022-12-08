@@ -12,8 +12,14 @@ export const set = (key: string, val: any) => {
 
 export const get = async (key: string) => {
     const location =  path.join(directory, key + '.json');
-    return fs.readFile(location, "utf8")
-        .then((data) => JSON.parse(data));
+    return fs.access(location)
+        .then(() => fs.readFile(location, "utf8").then((data) => JSON.parse(data)))
+        .catch((err) => {
+            if (err.code !== "ENOENT") {
+                throw err;
+            }
+            return set(key, null).then(() => fs.readFile(location, "utf8").then((data) => JSON.parse(data)));
+        })
 }
 
 export const setObject = async (key: string, id: string, val: any) => {
