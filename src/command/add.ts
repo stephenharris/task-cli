@@ -11,6 +11,7 @@ export const addCommand = (description: string, options: any, command: any) => {
         description: description,
         category: options.tag ? options.tag : null,
         date: options.due ? chrono.parseDate(options.due) : null,
+        status: "todo"
     }
     return setObject("todo", id, task)
         .then(() => console.log("Created task"));
