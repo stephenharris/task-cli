@@ -4,7 +4,7 @@
   "description": "",
   "main": "./index.js",
   "bin": {
-    "todo": "./entry.sh"
+    "task": "./entry.sh"
   },
   "type": "module",
   "scripts": {
