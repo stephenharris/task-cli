@@ -11,7 +11,7 @@ import { clientVersion } from "./lib/state";
 import { verifyStateVersion } from "./lib/upgrade";
 
 const program = new Command();
-program.version(`0.1.7 / ${clientVersion}`);
+program.version(`0.2.0 / ${clientVersion}`);
 
 program
   .command('sync')
