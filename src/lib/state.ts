@@ -1,7 +1,7 @@
 import { get, set } from "./storage";
 import { Task } from "./tasks";
 
-export const clientVersion = 1;
+export const clientVersion = 2;
 
 export interface State {
     version: number;

@@ -15,21 +15,21 @@ test('test adds new tasks', () => {
       description: "foobar",
       status: "todo",
       date: "2022-12-04T14:07:00Z",
-      category: "home",
+      tags: ["home"],
     },
     {
       id: "def123",
       description: "bar",
       status: "in-progress",
       date: "2022-12-04T14:07:00Z",
-      category: "home",
+      tags: ["home"],
     },
     {
       id: "ghi123",
       description: "baz",
       status: "complete",
       date: "2022-12-04T14:07:00Z",
-      category: "home",
+      tags: ["home"],
     }
   ]
 
@@ -41,21 +41,21 @@ test('test adds new tasks', () => {
         description: "foobar",
         status: "todo",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       },
       {
         id: "def123",
         description: "bar",
         status: "in-progress",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       },
       {
         id: "ghi123",
         description: "baz",
         status: "complete",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       }],
     serial: 2
   });
@@ -73,14 +73,14 @@ test('test updates locally changed tasks', () => {
         description: "Remote changes should not be updated",
         status: "todo",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       },
       {
         id: "def123",
         description: "bar",
         status: "in-progress",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       }]
     }
 
@@ -93,14 +93,14 @@ test('test updates locally changed tasks', () => {
           description: "Original",
           status: "todo",
           date: "2022-12-04T14:07:00Z",
-          category: "home",
+          tags: ["home"],
         },
         {
           id: "def123",
           description: "bar",
           status: "in-progress",
           date: "2022-12-04T14:07:00Z",
-          category: "home",
+          tags: ["home"],
         }
         ]
     }
@@ -111,14 +111,14 @@ test('test updates locally changed tasks', () => {
           description: "Original",
           status: "todo",
           date: "2022-12-04T14:07:00Z",
-          category: "home",
+          tags: ["home"],
         },
       {
         id: "def123",
         description: "bar",
         status: "complete",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       }
     ];
   
@@ -131,14 +131,14 @@ test('test updates locally changed tasks', () => {
             description: "Remote changes should not be updated",
             status: "todo",
             date: "2022-12-04T14:07:00Z",
-            category: "home",
+            tags: ["home"],
           },
           {
             id: "def123",
             description: "bar",
             status: "complete",
             date: "2022-12-04T14:07:00Z",
-            category: "home",
+            tags: ["home"],
           }
       ]
     });
@@ -154,14 +154,14 @@ test('deletes locally deleted task', () => {
         description: "This will be deleted",
         status: "in-progress",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       },
       {
         id: "def123",
         description: "bar",
         status: "complete",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       }]
     }
 
@@ -174,14 +174,14 @@ test('deletes locally deleted task', () => {
           description: "This will be deleted",
           status: "todo",
           date: "2022-12-04T14:07:00Z",
-          category: "home",
+          tags: ["home"],
         },
         {
           id: "def123",
           description: "bar",
           status: "in-progress",
           date: "2022-12-04T14:07:00Z",
-          category: "home",
+          tags: ["home"],
         }
         ]
     }
@@ -192,7 +192,7 @@ test('deletes locally deleted task', () => {
         description: "bar",
         status: "in-progress",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       }
     ];
   
@@ -205,7 +205,7 @@ test('deletes locally deleted task', () => {
             description: "bar",
             status: "complete",
             date: "2022-12-04T14:07:00Z",
-            category: "home",
+            tags: ["home"],
         }
       ]
     });
@@ -260,14 +260,14 @@ test('test no local changes tasks', () => {
         description: "Remote changes should not be updated",
         status: "todo",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       },
       {
         id: "def123",
         description: "bar",
         status: "in-progress",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
       }]
     }
 
@@ -280,14 +280,14 @@ test('test no local changes tasks', () => {
           description: "Original",
           status: "todo",
           date: "2022-12-04T14:07:00Z",
-          category: "home",
+          tags: ["home"],
         },
         {
           id: "def123",
           description: "bar",
           status: "in-progress",
           date: "2022-12-04T14:07:00Z",
-          category: "home",
+          tags: ["home"],
         }
         ]
     }
@@ -298,14 +298,14 @@ test('test no local changes tasks', () => {
           description: "Original",
           status: "todo",
           date: "2022-12-04T14:07:00Z",
-          category: "home",
+          tags: ["home"],
         },
         {
           id: "def123",
           description: "bar",
           status: "in-progress",
           date: "2022-12-04T14:07:00Z",
-          category: "home",
+          tags: ["home"],
         }
     ];
   
@@ -323,14 +323,14 @@ test('test no local cache', () => {
       description: "Remote changes should not be updated",
       status: "todo",
       date: "2022-12-04T14:07:00Z",
-      category: "home",
+      tags: ["home"],
     },
     {
       id: "def123",
       description: "bar",
       status: "in-progress",
       date: "2022-12-04T14:07:00Z",
-      category: "home",
+      tags: ["home"],
     }]
   }
 
@@ -341,7 +341,7 @@ test('test no local cache', () => {
       id: "def123",
       description: "bar",
       date: "2022-12-04T14:07:00Z",
-      category: "home",
+      tags: ["home"],
       status: "in-progress"
     }
   ];
@@ -353,21 +353,21 @@ test('test no local cache', () => {
       id: "abc123",
       description: "Remote changes should not be updated",
       date: "2022-12-04T14:07:00Z",
-      category: "home",
+      tags: ["home"],
       status: "todo"
     },
     {
       id: "def123",
       description: "bar",
       date: "2022-12-04T14:07:00Z",
-      category: "home",
+      tags: ["home"],
       status: "in-progress"
     },
     {
       id: "def123",
       description: "bar",
       date: "2022-12-04T14:07:00Z",
-      category: "home",
+      tags: ["home"],
       status: "in-progress"
     }]
   });

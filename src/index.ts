@@ -1,7 +1,3 @@
-#!/usr/local/bin/node --experimental-specifier-resolution=node
-
-
-// todo #!/usr/bin/env node 
 import chalk from "chalk";
 import {Command} from "commander"
 import { exit } from "process";
@@ -10,14 +6,24 @@ import { listCommmand } from "./command/list";
 import { remoteInitCommand } from "./command/remote-init";
 import { startCommand, stopCommand, completeCommand, deleteCommand } from "./command/status";
 import { syncCommand } from "./command/sync";
+import { upgradeCommand } from "./command/upgrade";
+import { clientVersion } from "./lib/state";
+import { verifyStateVersion } from "./lib/upgrade";
 
 const program = new Command();
+program.version(`0.1.7 / ${clientVersion}`);
 
 program
   .command('sync')
   .option('-t, --title <honorific>', 'title to use before name')
   .option('-d, --debug', 'display some debugging')
+  .hook('preAction', verifyStateVersion)
   .action(syncCommand);
+
+
+program
+  .command('upgrade')
+  .action(upgradeCommand);
 
 program
   .command('remote-init')
@@ -29,6 +35,7 @@ program
   .command('list')
   .option('-d, --due <due>', 'Filter events by due date')
   .option('-t, --tag <tag>', 'Filter events by tag')
+  .hook('preAction', verifyStateVersion)
   .action(listCommmand);
 
 program
@@ -36,26 +43,31 @@ program
   .argument('description')
   .option('-t, --tag <tag>', 'Tags')
   .option('-d, --due <date>', 'Due date')
+  .hook('preAction', verifyStateVersion)
   .action(addCommand);
 
 program
   .command('start')  
   .argument('task')
+  .hook('preAction', verifyStateVersion)
   .action(startCommand);
 
 program
   .command('stop')  
   .argument('task')
+  .hook('preAction', verifyStateVersion)
   .action(stopCommand);
 
 program
   .command('complete')  
   .argument('task')
+  .hook('preAction', verifyStateVersion)
   .action(completeCommand);
 
 program
   .command('delete')  
   .argument('task')
+  .hook('preAction', verifyStateVersion)
   .action(deleteCommand);
 
 program.parseAsync().catch((err: any) => {

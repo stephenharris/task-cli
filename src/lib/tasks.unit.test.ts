@@ -10,42 +10,42 @@ describe('sorting tasks', () => {
         id: "1",
         description: "foo",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
         status: "todo"
       },
       {
         id: "2",
         description: "foo",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
         status: "in-progress"
       },
       {
         id: "3",
         description: "foo",
         date: "2022-12-04T14:07:00Z",
-        category: "home",
+        tags: ["home"],
         status: "complete"
       },
       {
         id: "4",
         description: "foo",
         date: "2021-10-01T14:07:00Z",
-        category: "home",
+        tags: ["home"],
         status: "todo"
       },
       {
         id: "5",
         description: "foo",
         date: "2024-12-14T14:07:00Z",
-        category: "home",
+        tags: ["home"],
         status: "in-progress"
       },
       {
         id: "6",
         description: "foo",
         date: "2021-10-01T14:07:00Z",
-        category: "home",
+        tags: ["home"],
         status: "complete"
       },
 

@@ -1,5 +1,6 @@
 import { Task } from "../lib/tasks";
 import { State, clientVersion } from "./state";
+import { upgradeState } from "./upgrade";
 
 export const defaultState = {
     version: 1,
@@ -27,6 +28,8 @@ export function sync(remote: State | {}, cachedState: State | {} | null, localTa
     }
 
     let newState = JSON.parse(JSON.stringify(remote));
+    newState = upgradeState(newState)
+
     const cachedStateTaskIds =  cachedState && (cachedState as State).tasks?.map((task: Task) => task.id) || [];
     const localStateIds =  localTasks?.map((task: Task) => task.id) || [];
 

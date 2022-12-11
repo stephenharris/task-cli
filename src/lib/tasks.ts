@@ -2,7 +2,7 @@ import moment from "moment";
 import { get } from "./storage";
 
 export interface Task {
-  category: string;
+  tags: string[];
   description: string;
   date: string;
   id: string;

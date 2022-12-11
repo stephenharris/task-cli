@@ -47,7 +47,7 @@ export const listCommmand = (options: any, command: any) => {
 
 const showTask = (task: Task, options: any) : boolean => {
 
-    if( options.tag && options.tag.toLowerCase() !== task.category.toLowerCase()) {
+    if( options.tag && !task.tags.includes(options.tag.toLowerCase())) {
       return false;
     }
 
