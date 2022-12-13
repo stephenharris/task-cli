@@ -1,6 +1,6 @@
 import { Task } from "../lib/tasks";
-import { State, clientVersion } from "./state";
-import { upgradeState } from "./upgrade";
+import { State, clientVersion } from "../lib/state";
+import { upgradeState } from "../lib/upgrade";
 
 export const defaultState = {
     version: 2,
