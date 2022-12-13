@@ -1,10 +1,10 @@
 import moment from "moment";
-import { get } from "./storage";
+import { LocalStore } from "./state";
 
 export interface Task {
   tags: string[];
   description: string;
-  date: string;
+  date: string | null;
   id: string;
   status: string
 }
@@ -13,24 +13,21 @@ export interface TaskWithOrdinal extends Task {
   num: number;
 }
 
-export const getTasks = () => {
-  return get("todo").then((tasks) => tasks ? tasks : [])
-};
 
-export const getTasksWithOrdinal= () => {
-  return getTasks()
-    .then((tasks) => {
+export const getTasksWithOrdinal= (localStore: LocalStore): Promise<TaskWithOrdinal[]> => {
+  return localStore.getTasks()
+    .then((tasks: Task[]) => {
       let ordinal = 1;
-      return tasks.map((task: Task) => {
+      return tasks.map((task: Task): TaskWithOrdinal => {
         if (task.status !== 'complete') {
           (task as TaskWithOrdinal).num = ordinal;
           ordinal++;
         }
-        return task;
+        return task as TaskWithOrdinal;
       })
     })
 }
-export const getTask = (id: string) => getTasks().then((tasks) => tasks.find((m: Task) => m.id === id));
+export const getTask = (id: string, localStore: LocalStore) => localStore.getTasks().then((tasks) => tasks.find((m: Task) => m.id === id));
 
 export const sortTasks = (a: Task, b: Task) : number => {
   const statuses = ["complete", "todo", "in-progress" ];

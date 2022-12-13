@@ -1,38 +1,20 @@
 import { Octokit } from 'octokit';
+import { Disk } from './disk';
 import { RemoteConfigError, RemoteStore } from './remote';
-import { defaultState, State } from './state';
-import { get, set } from './storage';
+import { defaultState, LocalStore, State } from './state';
 
 export class Gist implements RemoteStore {
 
     private id: string;
     private octokit: Octokit;
     private static instance: Gist;
+    
 
     public constructor(id: string, token: string) {
         this.id = id;
         this.octokit = new Octokit({
             auth: token
         })
-    }
-
-    static async getStore(): Promise<Gist> {
-
-        if (!Gist.instance) {
-            const gist = await get("gist");
-
-            if( !gist || !gist.token || !gist.id) {
-                throw new RemoteConfigError("Gist not configured")
-            }
-        
-            Gist.instance = new Gist(gist.id, gist.token)
-        }
-
-        return Gist.instance;   
-    }
-
-    static async persistConig(id: string, token: string): Promise<void> {
-        return set("gist", {id: id, token:token});
     }
 
     getRemoteState(): Promise<State> {

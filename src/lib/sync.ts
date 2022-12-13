@@ -3,7 +3,7 @@ import { State, clientVersion } from "./state";
 import { upgradeState } from "./upgrade";
 
 export const defaultState = {
-    version: 1,
+    version: 2,
     serial: 1,
     tasks: []
 }
@@ -52,7 +52,7 @@ export function sync(remote: State | {}, cachedState: State | {} | null, localTa
     })
 
     // Update remote state
-    if (actions.add.length === 0 && actions.update.length === 0 && actions.delete.length === 0) {
+    if (actions.add.length === 0 && actions.update.length === 0 && actions.delete.length === 0 && newState.version === clientVersion) {
         console.log("Already in sync");
         return newState;
     }

@@ -59,7 +59,8 @@ program
   .action(stopCommand);
 
 program
-  .command('complete')  
+  .command('done')
+  .alias('complete')  
   .argument('task')
   .hook('preAction', verifyStateVersion)
   .action(completeCommand);

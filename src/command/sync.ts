@@ -1,21 +1,25 @@
 import { Gist } from "../lib/gist";
 import chalk from "chalk"
 import { sync } from "../lib/sync";
-import { getTasks } from "../lib/tasks";
-import { set } from "../lib/storage";
-import { defaultState, State } from "../lib/state";
-import {getCachedState, setCachedState} from "../lib/state"
+import { Disk } from "../lib/disk";
+import { defaultState, LocalStore, State } from "../lib/state";
 import {RemoteConfigError, RemoteStore} from "../lib/remote"
 
 export const syncCommand = async (options: any, command: any) => {
 
-    const store: RemoteStore = await Gist.getStore();
+    const localStore: LocalStore = await Disk.getStore();
+    const gist = await localStore.get("gist");
 
+    if( !gist || !gist.token || !gist.id) {
+        throw new RemoteConfigError("Gist not configured")
+    }
+
+    const store: RemoteStore = new Gist(gist.id, gist.token);
     
     return store.getRemoteState().then((remoteState: State) => {
         return Promise.allSettled([
-            getTasks(),
-            getCachedState(),
+            localStore.getTasks(),
+            localStore.getCachedState(),
             remoteState
         ])
         .then(async (result) => {
@@ -34,8 +38,8 @@ export const syncCommand = async (options: any, command: any) => {
               await store.setRemoteState(newState)
             }
 
-            return setCachedState(newState)
-                .then(() => set("todo", newState.tasks));
+            return localStore.setCachedState(newState)
+                .then(() => localStore.set("todo", newState.tasks));
         })
         .then(() => {
             console.log('In sync');

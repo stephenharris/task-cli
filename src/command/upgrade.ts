@@ -1,13 +1,13 @@
-import { getTasks } from "../lib/tasks";
-import { set } from "../lib/storage";
-import {getCachedState, setCachedState} from "../lib/state"
+import { Disk } from "../lib/disk";
 import { upgradeState } from "../lib/upgrade";
 
 export const upgradeCommand = async (options: any, command: any) => {
 
+    const localStore = Disk.getStore();
+
     Promise.allSettled([
-        getTasks(),
-        getCachedState()
+        localStore.getTasks(),
+        localStore.getCachedState()
     ])
     .then(async (result) => {
 
@@ -28,8 +28,8 @@ export const upgradeCommand = async (options: any, command: any) => {
         tmp = upgradeState(tmp);
         cachedState = upgradeState(cachedState);
 
-        return setCachedState(cachedState)
-                .then(() => set("todo", tmp.tasks));
+        return localStore.setCachedState(cachedState)
+                .then(() => localStore.set("todo", tmp.tasks));
 
     })
 }

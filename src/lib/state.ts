@@ -1,4 +1,3 @@
-import { get, set } from "./storage";
 import { Task } from "./tasks";
 
 export const clientVersion = 2;
@@ -15,10 +14,13 @@ export const defaultState = {
     tasks: []
 }
 
-export const getCachedState = () => {
-    return get("cachedstate")
+export interface LocalStore {
+
+    get(key: string): Promise<any>
+    set(key: string, value: any): Promise<void>
+
+    getTasks(): Promise<Task[]>
+    getCachedState(): Promise<State>;
+    setCachedState(state: State): Promise<State>;
 }
 
-export const setCachedState = (data: State) => {
-    return set("cachedstate", data);
-}

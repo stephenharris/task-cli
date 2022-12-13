@@ -1,19 +1,22 @@
 import chalk from "chalk"
-import { getTasks, getTasksWithOrdinal, Task, TaskWithOrdinal } from "../lib/tasks";
+import { getTasksWithOrdinal, Task, TaskWithOrdinal } from "../lib/tasks";
 import Table from "cli-table3";
 import moment from "moment";
 import {sortTasks} from '../lib/tasks'
+import { Disk } from "../lib/disk";
 
 moment.relativeTimeThreshold('m', 45);
 moment.relativeTimeThreshold('h', 48);
 moment.relativeTimeThreshold('d', 14);
 moment.relativeTimeThreshold('w', 4)
 
+const localStore = Disk.getStore();
+
 export const listCommmand = (options: any, command: any) => {
 
-    return getTasksWithOrdinal()
+    return getTasksWithOrdinal(localStore)
     .then((tasks: TaskWithOrdinal[]) => tasks.filter((task: TaskWithOrdinal) => task.status !== 'complete').sort(sortTasks))
-    .then((tasks) => tasks.filter((task) => showTask(task, options)))
+    .then((tasks: TaskWithOrdinal[]) => tasks.filter((task) => showTask(task, options)))
     .then((tasks: TaskWithOrdinal[]) => {
     
         let table = new Table({

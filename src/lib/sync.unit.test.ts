@@ -4,7 +4,7 @@ import { Task } from "./tasks";
 test('test adds new tasks', () => {
 
   let remoteState = {
-    version: 1,
+    version: 2,
     serial: 1,
     tasks: []
   }
@@ -35,7 +35,7 @@ test('test adds new tasks', () => {
 
 
   expect(sync(remoteState, remoteState, localTasks)).toEqual({
-    version: 1,
+    version: 2,
     tasks: [    {
         id: "abc123",
         description: "foobar",
@@ -66,7 +66,7 @@ test('test adds new tasks', () => {
 test('test updates locally changed tasks', () => {
 
     let remoteState = {
-      version: 1,
+      version: 2,
       serial: 2,
       tasks: [{
         id: "abc123",
@@ -85,7 +85,7 @@ test('test updates locally changed tasks', () => {
     }
 
     let cachedState = {
-        version: 1,
+        version: 2,
         serial: 1,
         tasks: [
         {
@@ -123,7 +123,7 @@ test('test updates locally changed tasks', () => {
     ];
   
     expect(sync(remoteState, cachedState, localTasks)).toEqual({
-      version: 1,
+      version: 2,
       serial: 3,
       tasks: [ 
         {
@@ -147,7 +147,7 @@ test('test updates locally changed tasks', () => {
 test('deletes locally deleted task', () => {
 
     let remoteState = {
-      version: 1,
+      version: 2,
       serial: 2,
       tasks: [{
         id: "abc123",
@@ -166,7 +166,7 @@ test('deletes locally deleted task', () => {
     }
 
     let cachedState = {
-        version: 1,
+        version: 2,
         serial: 1,
         tasks: [
         {
@@ -197,7 +197,7 @@ test('deletes locally deleted task', () => {
     ];
   
     expect(sync(remoteState, cachedState, localTasks)).toEqual({
-      version: 1,
+      version: 2,
       serial: 3,
       tasks: [ 
         {
@@ -215,13 +215,13 @@ test('deletes locally deleted task', () => {
 test('handles new state', () => {
 
     let remoteState = {
-      version: 1,
+      version: 2,
       serial: 2,
       tasks: []
     }
 
     let cachedState = {
-        version: 1,
+        version: 2,
         serial: 1,
         tasks: []
     }
@@ -229,7 +229,7 @@ test('handles new state', () => {
     let localTasks: Task[] = [];
   
     expect(sync(remoteState, cachedState, localTasks)).toEqual({
-      version: 1,
+      version: 2,
       serial: 2,
       tasks: []
     });
@@ -244,7 +244,7 @@ test('handles initial setup', () => {
     let localTasks: Task[] = [];
   
     expect(sync(remoteState, cachedState, localTasks)).toEqual({
-      version: 1,
+      version: 2,
       serial: 1,
       tasks: []
     });
@@ -253,7 +253,7 @@ test('handles initial setup', () => {
 test('test no local changes tasks', () => {
 
     let remoteState = {
-      version: 1,
+      version: 2,
       serial: 2,
       tasks: [{
         id: "abc123",
@@ -272,7 +272,7 @@ test('test no local changes tasks', () => {
     }
 
     let cachedState = {
-        version: 1,
+        version: 2,
         serial: 1,
         tasks: [
         {
@@ -316,7 +316,7 @@ test('test no local changes tasks', () => {
 test('test no local cache', () => {
 
   let remoteState = {
-    version: 1,
+    version: 2,
     serial: 2,
     tasks: [{
       id: "abc123",
@@ -347,7 +347,7 @@ test('test no local cache', () => {
   ];
 
   expect(sync(remoteState, cachedState, localTasks)).toEqual({
-    version: 1,
+    version: 2,
     serial: 3,
     tasks: [{
       id: "abc123",

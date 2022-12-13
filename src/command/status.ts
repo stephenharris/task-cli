@@ -1,10 +1,12 @@
 import chalk from "chalk"
 import { getTasksWithOrdinal, Task, TaskWithOrdinal } from "../lib/tasks";
-import { removeObject, setObject } from "../lib/storage";
+import { Disk } from "../lib/disk";
+
+const localStore = Disk.getStore()
 
 const findTask = (num: number) => {
     const numInt = parseInt(""+num);
-    return getTasksWithOrdinal()
+    return getTasksWithOrdinal(localStore)
         .then((tasks: TaskWithOrdinal[]) => {
             return tasks.find((task: TaskWithOrdinal) => task.num === numInt)
         })
@@ -20,7 +22,7 @@ export const startCommand = (taskNumber: number, options: any, command: any) => 
             }
 
             task.status = 'in-progress';
-            return setObject('todo', task.id, task);
+            return localStore.setObject('todo', task.id, task);
         })
         .then((task: Task) =>{
             console.log(`Started task ${task.description}`);
@@ -36,7 +38,7 @@ export const stopCommand = (taskId: number, options: any, command: any) => {
                 return;
             }
             task.status = 'todo';
-            return setObject('todo', task.id, task);
+            return localStore.setObject('todo', task.id, task);
         })
         .then((task: Task) =>{
             console.log(`Stopped task ${task.description}`);
@@ -52,7 +54,7 @@ export const completeCommand = (taskId: number, options: any, command: any) => {
                 return;
             }
             task.status = 'complete';
-            return setObject('todo', task.id, task);
+            return localStore.setObject('todo', task.id, task);
         })
         .then((task: Task) =>{
             console.log(`Completed task ${task.description}`);
@@ -68,7 +70,7 @@ export const deleteCommand = (taskId: number, options: any, command: any) => {
                 return;
             }
 
-            await removeObject('todo', task.id);
+            await localStore.removeObject('todo', task.id);
 
             console.log(`Deleted task ${task.description}`);
         })
