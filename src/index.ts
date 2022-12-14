@@ -7,11 +7,27 @@ import { remoteInitCommand } from "./command/remote-init";
 import { startCommand, stopCommand, completeCommand, deleteCommand } from "./command/status";
 import { syncCommand } from "./command/sync";
 import { upgradeCommand } from "./command/upgrade";
-import { clientVersion } from "./lib/state";
-import { verifyStateVersion } from "./lib/upgrade";
+import { Disk } from "./lib/disk";
+import { clientVersion, State } from "./lib/state";
 
 const program = new Command();
 program.version(`0.2.0 / ${clientVersion}`);
+
+export const verifyStateVersion = async () => {
+
+  const localStore = Disk.getStore();
+
+  await localStore.getCachedState().then((cachedState: State) => {
+      if(cachedState.version > clientVersion) {
+          throw Error(`Client version is ${clientVersion}, but state is at version ${cachedState.version}. Please update the client client.`)
+      }
+      if(cachedState.version < clientVersion) {
+          throw Error(
+              `Client version is ${clientVersion}, but state is at version ${cachedState.version}. Run 
+                  task upgrade`)
+      }
+  })
+}
 
 program
   .command('sync')
@@ -75,3 +91,4 @@ program.parseAsync().catch((err: any) => {
   console.log(chalk.red("ERROR: " + err.message));
   exit(1);
 });
+
