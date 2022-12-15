@@ -1,4 +1,3 @@
-import { Disk } from "./disk";
 import { clientVersion, State } from "./state"
 
 export interface Version1State {
@@ -11,22 +10,6 @@ export interface Version1State {
         id: string;
         status: string
     }[];
-}
-
-export const verifyStateVersion = async () => {
-
-    const localStore = Disk.getStore();
-
-    await localStore.getCachedState().then((cachedState: State) => {
-        if(cachedState.version > clientVersion) {
-            throw Error(`Client version is ${clientVersion}, but state is at version ${cachedState.version}. Please update the client client.`)
-        }
-        if(cachedState.version < clientVersion) {
-            throw Error(
-                `Client version is ${clientVersion}, but state is at version ${cachedState.version}. Run 
-                    task upgrade`)
-        }
-    })
 }
 
 
