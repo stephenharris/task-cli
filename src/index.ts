@@ -2,6 +2,7 @@ import chalk from "chalk";
 import {Command} from "commander"
 import { exit } from "process";
 import { addCommand } from "./command/add";
+import { editCommand } from "./command/edit";
 import { listCommmand } from "./command/list";
 import { remoteInitCommand } from "./command/remote-init";
 import { startCommand, stopCommand, completeCommand, deleteCommand } from "./command/status";
@@ -86,6 +87,13 @@ program
   .argument('task')
   .hook('preAction', verifyStateVersion)
   .action(deleteCommand);
+
+program
+  .command('edit')  
+  .argument('task')
+  .hook('preAction', verifyStateVersion)
+  .action(editCommand);
+
 
 program.parseAsync().catch((err: any) => {
   console.log(chalk.red("ERROR: " + err.message));

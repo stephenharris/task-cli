@@ -1,4 +1,5 @@
 import moment from "moment";
+import { SchemaObject } from "yaml-schema";
 import { LocalStore } from "./state";
 
 export interface Task {
@@ -11,6 +12,32 @@ export interface Task {
 
 export interface TaskWithOrdinal extends Task {
   num: number;
+}
+
+export const TaskSchema: SchemaObject = {
+  type: "object",
+  props: {
+      description: {
+          type: "string"
+      },
+      date: {
+          type: "string"
+      },
+      status: {
+          type: "choices",
+          choices: [
+              "todo",
+              "in-progress",
+              "complete"
+          ]
+      },
+      tags: {
+          type: "array",
+          element: {
+              type: "string"
+          }
+      }
+  }
 }
 
 
