@@ -5,6 +5,7 @@ import { addCommand } from "./command/add";
 import { editCommand } from "./command/edit";
 import { listCommmand } from "./command/list";
 import { remoteInitCommand } from "./command/remote-init";
+import { searchCommand } from "./command/search";
 import { startCommand, stopCommand, completeCommand, deleteCommand } from "./command/status";
 import { syncCommand } from "./command/sync";
 import { upgradeCommand } from "./command/upgrade";
@@ -12,7 +13,7 @@ import { Disk } from "./lib/disk";
 import { clientVersion, State } from "./lib/state";
 
 const program = new Command();
-program.version(`0.2.0 / ${clientVersion}`);
+program.version(`0.2.7 / ${clientVersion}`);
 
 export const verifyStateVersion = async () => {
 
@@ -93,6 +94,13 @@ program
   .argument('task')
   .hook('preAction', verifyStateVersion)
   .action(editCommand);
+
+
+program
+  .command('search')  
+  .argument('searchTerm')
+  .hook('preAction', verifyStateVersion)
+  .action(searchCommand);
 
 
 program.parseAsync().catch((err: any) => {

@@ -75,3 +75,7 @@ export const sortTasks = (a: Task, b: Task) : number => {
   // A higher status index should be shown first
   return aStatus > bStatus ? -1 : 1;
 }
+
+export const containsSearchTerm = (task: Task, searchTerm: string) : boolean => { 
+  return task.description.toLocaleLowerCase().match(searchTerm.toLocaleLowerCase()) !== null;
+}
