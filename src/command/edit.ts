@@ -1,11 +1,11 @@
 import { Disk } from "../lib/disk";
-import { findTask, Task, TaskSchema, TaskWithOrdinal } from "../lib/tasks";
+import { Task, TaskSchema, TaskService, TaskWithOrdinal } from "../lib/tasks";
 import chalk from "chalk";
 import { stringify } from 'yaml'
 import inquirer from "inquirer"
 import {YAML} from "yaml-schema"
 
-const localStore = Disk.getStore()
+const taskService = new TaskService(Disk.getStore())
 
 const editTask = (taskDetails: string, taskID: string): Promise<any> => {
     
@@ -25,9 +25,9 @@ const editTask = (taskDetails: string, taskID: string): Promise<any> => {
     })
 }
 
-export const editCommand = (taskNumber: number, options: any, command: any) => {
+export const editCommand = (taskNumber: string, options: any, command: any) => {
 
-    return findTask(taskNumber, localStore)
+    return taskService.findTask(taskNumber)
         .then((task: TaskWithOrdinal | undefined) =>{
             if (!task) {
                 chalk.red(`Task ${taskNumber} not found.`)
@@ -37,14 +37,12 @@ export const editCommand = (taskNumber: number, options: any, command: any) => {
             const { id, num, ...taskDetails } = task;
 
             return editTask(`# Edit task ${task.id}\n\n` + stringify(taskDetails), id)
-            
-            .then((task: Task) => {
-                task.id = id;
-                return localStore.setObject('todo', task.id, task);
-            })
-            .then(() => {
-                console.log(`Task ${task.id.slice(0,6)} updated`)
-            });
+                .then((editedTask: Task) => {
+                    editedTask.id = id;
+                    return taskService.updateTask(editedTask).then(() => {
+                        console.log(`Task ${task.id.slice(0,6)} updated`)
+                    });   
+                })
 
         })
 }

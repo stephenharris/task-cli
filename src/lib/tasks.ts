@@ -40,21 +40,87 @@ export const TaskSchema: SchemaObject = {
   }
 }
 
+export class TaskService {
 
-export const getTasksWithOrdinal= (localStore: LocalStore): Promise<TaskWithOrdinal[]> => {
-  return localStore.getTasks()
-    .then((tasks: Task[]) => {
-      let ordinal = 1;
-      return tasks.map((task: Task): TaskWithOrdinal => {
-        if (task.status !== 'complete') {
-          (task as TaskWithOrdinal).num = ordinal;
-          ordinal++;
-        }
-        return task as TaskWithOrdinal;
+  localStore: LocalStore;
+
+  constructor(localStore: LocalStore) {
+    this.localStore = localStore
+  }
+
+  updateTask(task: Task): Promise<Task> {
+    return this.localStore.setTask(task.id, task)
+  }
+
+  deleteTask(taskId: string) {
+    return this.localStore.removeTask(taskId)
+  }
+
+  getTasksWithOrdinal(): Promise<TaskWithOrdinal[]> {
+    return this.localStore.getTasks()
+      .then((tasks: Task[]) => {
+        let ordinal = 1;
+        return tasks.map((task: Task): TaskWithOrdinal => {
+          if (task.status !== 'complete') {
+            (task as TaskWithOrdinal).num = ordinal;
+            ordinal++;
+          }
+          return task as TaskWithOrdinal;
+        })
       })
-    })
+  }
+
+  search(searchTerm: string): Promise<TaskWithOrdinal[]> {
+    return this.getTasksWithOrdinal()
+      .then((tasks: TaskWithOrdinal[]) => {
+        return tasks.filter((task: TaskWithOrdinal) => containsSearchTerm(task, searchTerm))
+      })
+  }
+  
+
+  getTask(id: string): Promise<Task>{ 
+    return this.localStore.getTasks()
+      .then((tasks) => tasks.find((m: Task) => m.id === id))
+      .then((task: Task | undefined) => {
+        if (task === undefined) {
+          throw Error(`Task ${id} not found`)
+        }
+        return task;
+      });
+  }
+
+  findTask(num: string): Promise<TaskWithOrdinal>{
+
+    const identifier = num+""
+  
+    if (identifier.match("^[0-9a-fA-F]{6}$") !== null) {
+        return getTasksWithOrdinal(this.localStore)
+            .then((tasks: TaskWithOrdinal[]) => {
+                return tasks.find((task: TaskWithOrdinal) => task.id.toLowerCase().startsWith(identifier.toLowerCase()))
+            })
+            .then((task: TaskWithOrdinal | undefined) => {
+              if (task === undefined) {
+                throw Error(`Task ${identifier} not found`)
+              }
+              return task;
+            })
+    } else {
+        const numInt = parseInt(identifier);
+        return getTasksWithOrdinal(this.localStore)
+            .then((tasks: TaskWithOrdinal[]) => {
+                return tasks.find((task: TaskWithOrdinal) => task.num === numInt)
+            })
+            .then((task: TaskWithOrdinal | undefined) => {
+              if (task === undefined) {
+                throw Error(`Task ${identifier} not found`)
+              }
+              return task;
+            })
+    }
+    
+  }
+
 }
-export const getTask = (id: string, localStore: LocalStore) => localStore.getTasks().then((tasks) => tasks.find((m: Task) => m.id === id));
 
 export const sortTasks = (a: Task, b: Task) : number => {
   const statuses = ["complete", "todo", "in-progress" ];
@@ -79,6 +145,22 @@ export const sortTasks = (a: Task, b: Task) : number => {
 export const containsSearchTerm = (task: Task, searchTerm: string) : boolean => { 
   return task.description.toLocaleLowerCase().match(searchTerm.toLocaleLowerCase()) !== null;
 }
+
+// Deprecated
+export const getTasksWithOrdinal= (localStore: LocalStore): Promise<TaskWithOrdinal[]> => {
+  return localStore.getTasks()
+    .then((tasks: Task[]) => {
+      let ordinal = 1;
+      return tasks.map((task: Task): TaskWithOrdinal => {
+        if (task.status !== 'complete') {
+          (task as TaskWithOrdinal).num = ordinal;
+          ordinal++;
+        }
+        return task as TaskWithOrdinal;
+      })
+    })
+}
+export const getTask = (id: string, localStore: LocalStore) => localStore.getTasks().then((tasks) => tasks.find((m: Task) => m.id === id));
 
 export const findTask = (num: number | string, localStore: LocalStore) => {
 

@@ -1,4 +1,4 @@
-import { getTasksWithOrdinal, Task, TaskWithOrdinal } from "../lib/tasks";
+import {Task, TaskService, TaskWithOrdinal } from "../lib/tasks";
 import moment from "moment";
 import {sortTasks} from '../lib/tasks'
 import { Disk } from "../lib/disk";
@@ -9,11 +9,11 @@ moment.relativeTimeThreshold('h', 48);
 moment.relativeTimeThreshold('d', 14);
 moment.relativeTimeThreshold('w', 4)
 
-const localStore = Disk.getStore();
+const taskService = new TaskService(Disk.getStore())
 
 export const listCommmand = (options: any, command: any) => {
 
-    return getTasksWithOrdinal(localStore)
+    return taskService.getTasksWithOrdinal()
     .then((tasks: TaskWithOrdinal[]) => tasks.filter((task: TaskWithOrdinal) => task.status !== 'complete').sort(sortTasks))
     .then((tasks: TaskWithOrdinal[]) => tasks.filter((task) => showTask(task, options)))
     .then((tasks: TaskWithOrdinal[]) => {

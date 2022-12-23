@@ -1,7 +1,7 @@
 import { Disk } from "../lib/disk";
 import { v4 as uuid } from 'uuid';
 import * as chrono from 'chrono-node';
-
+import { TaskService } from "../lib/tasks";
 
 export const addCommand = (description: string, options: any, command: any) => {
 
@@ -14,8 +14,8 @@ export const addCommand = (description: string, options: any, command: any) => {
         status: "todo"
     }
 
-    const localStore = Disk.getStore();
+    const taskService = new TaskService(Disk.getStore())
     
-    return localStore.setTodo(id, task)
+    return taskService.updateTask(task)
         .then(() => console.log(`Created task ${id.slice(0,6)}`));
 }
