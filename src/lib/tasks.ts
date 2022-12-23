@@ -79,3 +79,23 @@ export const sortTasks = (a: Task, b: Task) : number => {
 export const containsSearchTerm = (task: Task, searchTerm: string) : boolean => { 
   return task.description.toLocaleLowerCase().match(searchTerm.toLocaleLowerCase()) !== null;
 }
+
+export const findTask = (num: number | string, localStore: LocalStore) => {
+
+  const identifier = num+""
+
+  if (identifier.match("^[0-9a-fA-F]{6}$") !== null) {
+
+      return getTasksWithOrdinal(localStore)
+          .then((tasks: TaskWithOrdinal[]) => {
+              return tasks.find((task: TaskWithOrdinal) => task.id.toLowerCase().startsWith(identifier.toLowerCase()))
+          })
+  } else {
+      const numInt = parseInt(identifier);
+      return getTasksWithOrdinal(localStore)
+          .then((tasks: TaskWithOrdinal[]) => {
+              return tasks.find((task: TaskWithOrdinal) => task.num === numInt)
+          })
+  }
+  
+}

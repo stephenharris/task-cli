@@ -15,7 +15,7 @@ export const addCommand = (description: string, options: any, command: any) => {
     }
 
     const localStore = Disk.getStore();
-    //setTodo
+    
     return localStore.setTodo(id, task)
-        .then(() => console.log("Created task"));
+        .then(() => console.log(`Created task ${id.slice(0,6)}`));
 }
