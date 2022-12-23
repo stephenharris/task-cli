@@ -4,6 +4,7 @@ import chalk from "chalk";
 import { stringify } from 'yaml'
 import inquirer from "inquirer"
 import {YAML} from "yaml-schema"
+import { deepEqual } from "../lib/util";
 
 const taskService = new TaskService(Disk.getStore())
 
@@ -39,9 +40,15 @@ export const editCommand = (taskNumber: string, options: any, command: any) => {
             return editTask(`# Edit task ${task.id}\n\n` + stringify(taskDetails), id)
                 .then((editedTask: Task) => {
                     editedTask.id = id;
-                    return taskService.updateTask(editedTask).then(() => {
-                        console.log(`Task ${task.id.slice(0,6)} updated`)
-                    });   
+                    const { num, ...originalTask } = task;
+
+                    if (!deepEqual(originalTask, editedTask)) {
+                        return taskService.updateTask(editedTask).then(() => {
+                            console.log(`Task ${task.id.slice(0,6)} updated`)
+                        });
+                    } else {
+                        return console.log(`Task ${task.id.slice(0,6)} unchanged`)
+                    }    
                 })
 
         })
