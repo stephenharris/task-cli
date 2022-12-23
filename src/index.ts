@@ -65,7 +65,8 @@ program
   .action(addCommand);
 
 program
-  .command('start')  
+  .command('start')
+  .alias('started')
   .argument('task')
   .hook('preAction', verifyStateVersion)
   .action(startCommand);
