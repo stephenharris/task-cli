@@ -28,8 +28,17 @@ export class Disk implements LocalStore {
         return this.set("cachedstate", data).then(() => data);
     }
 
+    
+    public setTask(id: string, task: Task) {
+        return this.setObject("todo", id, task)
+      } 
+    
     public setTodo(id: string, task: Task) {
       return this.setObject("todo", id, task)
+    } 
+
+    public removeTask(id: string) {
+        return this.removeObject("todo", id)
     } 
 
     public getTasks(){

@@ -19,6 +19,9 @@ export interface LocalStore {
     get(key: string): Promise<any>
     set(key: string, value: any): Promise<void>
 
+    setTask(id: string, task: Task): Promise<Task>
+    removeTask(id: string): Promise<void>
+
     getTasks(): Promise<Task[]>
     getCachedState(): Promise<State>;
     setCachedState(state: State): Promise<State>;
