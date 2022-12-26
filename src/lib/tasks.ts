@@ -7,7 +7,8 @@ export interface Task {
   description: string;
   date: string | null;
   id: string;
-  status: string
+  status: string;
+  lastUpdated?: string | null
 }
 
 export interface TaskWithOrdinal extends Task {
@@ -36,7 +37,10 @@ export const TaskSchema: SchemaObject = {
           element: {
               type: "string"
           }
-      }
+      },
+      lastUpdated: {
+        type: "string"
+      },
   }
 }
 
@@ -49,6 +53,7 @@ export class TaskService {
   }
 
   updateTask(task: Task): Promise<Task> {
+    task.lastUpdated = moment().toISOString();
     return this.localStore.setTask(task.id, task)
   }
 

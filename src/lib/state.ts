@@ -1,6 +1,6 @@
 import { Task } from "./tasks";
 
-export const clientVersion = 2;
+export const clientVersion = 3;
 
 export interface State {
     version: number;
