@@ -1,6 +1,8 @@
 import chalk from "chalk";
 import {Command} from "commander"
+import { dirname } from "path";
 import { exit } from "process";
+import { fileURLToPath } from "url";
 import { addCommand } from "./command/add";
 import { editCommand } from "./command/edit";
 import { listCommmand } from "./command/list";
@@ -9,11 +11,15 @@ import { searchCommand } from "./command/search";
 import { startCommand, stopCommand, completeCommand, deleteCommand } from "./command/status";
 import { syncCommand } from "./command/sync";
 import { upgradeCommand } from "./command/upgrade";
+import { getVersionSync } from "./common/version";
 import { Disk } from "./lib/disk";
 import { clientVersion, State } from "./lib/state";
 
 const program = new Command();
-program.version(`0.2.7 / ${clientVersion}`);
+
+const __filename = fileURLToPath(import.meta.url);
+console.log(dirname(__filename));
+program.version(`${getVersionSync(__filename)} / ${clientVersion}`);
 
 export const verifyStateVersion = async () => {
 
