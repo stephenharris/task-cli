@@ -102,29 +102,31 @@ export class TaskService {
 
     const identifier = num+""
   
-    if (identifier.match("^[0-9a-fA-F]{6}$") !== null) {
-        return getTasksWithOrdinal(this.localStore)
-            .then((tasks: TaskWithOrdinal[]) => {
-                return tasks.find((task: TaskWithOrdinal) => task.id.toLowerCase().startsWith(identifier.toLowerCase()))
-            })
-            .then((task: TaskWithOrdinal | undefined) => {
-              if (task === undefined) {
-                throw Error(`Task ${identifier} not found`)
-              }
-              return task;
-            })
+    if (identifier.match("^[0-9]+$") !== null) {
+      const numInt = parseInt(identifier);
+      return getTasksWithOrdinal(this.localStore)
+        .then((tasks: TaskWithOrdinal[]) => {
+            return tasks.find((task: TaskWithOrdinal) => task.num === numInt)
+        })
+        .then((task: TaskWithOrdinal | undefined) => {
+          if (task === undefined) {
+            throw Error(`Task ${identifier} not found`)
+          }
+          return task;
+        })
+    } else if( identifier.match("^[0-9a-fA-F]{6}") !== null) {
+      return getTasksWithOrdinal(this.localStore)
+        .then((tasks: TaskWithOrdinal[]) => {
+            return tasks.find((task: TaskWithOrdinal) => task.id.toLowerCase().startsWith(identifier.toLowerCase()))
+        })
+        .then((task: TaskWithOrdinal | undefined) => {
+          if (task === undefined) {
+            throw Error(`Task ${identifier} not found`)
+          }
+          return task;
+        })
     } else {
-        const numInt = parseInt(identifier);
-        return getTasksWithOrdinal(this.localStore)
-            .then((tasks: TaskWithOrdinal[]) => {
-                return tasks.find((task: TaskWithOrdinal) => task.num === numInt)
-            })
-            .then((task: TaskWithOrdinal | undefined) => {
-              if (task === undefined) {
-                throw Error(`Task ${identifier} not found`)
-              }
-              return task;
-            })
+      throw Error(`Task ${identifier} not found`)
     }
     
   }
