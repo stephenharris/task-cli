@@ -1,9 +1,9 @@
 import chalk from "chalk";
 import moment from "moment";
-import { TaskWithOrdinal } from "../lib/tasks";
+import { getTasksWithOrdinal, Task, TaskWithOrdinal } from "../lib/tasks";
 import Table from "cli-table3";
 
-export const renderTable = (tasks: TaskWithOrdinal[]) : Table.Table => {
+export const renderTable = (tasks: TaskWithOrdinal[]|Task[]) : Table.Table => {
 
     let table = new Table({
         head: ['#', 'Due', 'Description', "Status"].map((cell) => chalk.blueBright(cell))
@@ -14,7 +14,9 @@ export const renderTable = (tasks: TaskWithOrdinal[]) : Table.Table => {
     });
 
     for (let task of tasks) {
-        let row = [task.num ? task.num : '-', task.date ? moment(task.date).fromNow() : '-', task.description, task.status].map((column) => {
+
+        let id = (task as TaskWithOrdinal).num !== undefined ? (task as TaskWithOrdinal).num : task.id.slice(0,6)
+        let row = [id, task.date ? moment(task.date).fromNow() : '-', task.description, task.status].map((column) => {
 
             if (task.status === "in-progress") {
                 return chalk.yellow(column)
