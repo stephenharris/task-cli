@@ -140,10 +140,10 @@ export const sortTasks = (a: Task, b: Task) : number => {
 
   // If status is the same, sort by date due, earliest first.
   if (aStatus === bStatus) {
-    if (a.date === null) {
+    if (a.date === null || a.date === "") {
       return 1;
     }
-    if (b.date === null) {
+    if (b.date === null || a.date === "") {
       return -1;
     }
     return moment(a.date).isBefore(moment(b.date)) ? -1 : 1;
