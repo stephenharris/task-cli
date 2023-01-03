@@ -14,14 +14,17 @@ const taskService = new TaskService(Disk.getStore())
 export const listCommmand = (options: any, command: any) => {
 
     return taskService.getTasksWithOrdinal()
-    .then((tasks: TaskWithOrdinal[]) => tasks.filter((task: TaskWithOrdinal) => task.status !== 'complete').sort(sortTasks))
-    .then((tasks: TaskWithOrdinal[]) => tasks.filter((task) => showTask(task, options)))
+    .then((tasks: TaskWithOrdinal[]) => tasks.filter((task) => showTask(task, options)).sort(sortTasks))
     .then((tasks: TaskWithOrdinal[]) => {
         console.log(renderTable(tasks).toString());
     })
 }
 
 const showTask = (task: Task, options: any) : boolean => {
+
+    if (task.status === "complete") {
+      return false;
+    }
 
     if( options.tag && !task.tags.includes(options.tag.toLowerCase())) {
       return false;

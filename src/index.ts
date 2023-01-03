@@ -1,6 +1,5 @@
 import chalk from "chalk";
 import {Command} from "commander"
-import { dirname } from "path";
 import { exit } from "process";
 import { fileURLToPath } from "url";
 import { addCommand } from "./command/add";
@@ -18,7 +17,6 @@ import { clientVersion, State } from "./lib/state";
 const program = new Command();
 
 const __filename = fileURLToPath(import.meta.url);
-console.log(dirname(__filename));
 program.version(`${getVersionSync(__filename)} / ${clientVersion}`);
 
 export const verifyStateVersion = async () => {
