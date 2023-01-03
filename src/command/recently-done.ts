@@ -9,15 +9,19 @@ const taskService = new TaskService(Disk.getStore())
 export const recentlyDoneCommand = (options: any, command: any) => {
 
     return taskService.getTasks()
-    .then((tasks: Task[]) => tasks.filter(recentlyCompletedFilter).sort(sortByCompletedDate))
+    .then((tasks: Task[]) => tasks.filter((task) => recentlyCompletedFilter(task, options)).sort(sortByCompletedDate))
     .then((tasks: Task[]) => {
         console.log(renderCompletedTasksTable(tasks).toString());
     })
 }
 
-const recentlyCompletedFilter = (task: Task) : boolean => {
+const recentlyCompletedFilter = (task: Task, options: any) : boolean => {
 
   if (task.status !== 'complete') {
+    return false;
+  }
+
+  if( options.tag && !task.tags.includes(options.tag.toLowerCase())) {
     return false;
   }
 
