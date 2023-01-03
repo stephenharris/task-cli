@@ -1,19 +1,24 @@
 import chalk from "chalk";
 import {Command} from "commander"
 import { exit } from "process";
+import { fileURLToPath } from "url";
 import { addCommand } from "./command/add";
 import { editCommand } from "./command/edit";
 import { listCommmand } from "./command/list";
+import { recentlyDoneCommand } from "./command/recently-done";
 import { remoteInitCommand } from "./command/remote-init";
 import { searchCommand } from "./command/search";
 import { startCommand, stopCommand, completeCommand, deleteCommand } from "./command/status";
 import { syncCommand } from "./command/sync";
 import { upgradeCommand } from "./command/upgrade";
+import { getVersionSync } from "./common/version";
 import { Disk } from "./lib/disk";
 import { clientVersion, State } from "./lib/state";
 
 const program = new Command();
-program.version(`0.2.7 / ${clientVersion}`);
+
+const __filename = fileURLToPath(import.meta.url);
+program.version(`${getVersionSync(__filename)} / ${clientVersion}`);
 
 export const verifyStateVersion = async () => {
 
@@ -65,7 +70,8 @@ program
   .action(addCommand);
 
 program
-  .command('start')  
+  .command('start')
+  .alias('started')
   .argument('task')
   .hook('preAction', verifyStateVersion)
   .action(startCommand);
@@ -101,6 +107,12 @@ program
   .argument('searchTerm')
   .hook('preAction', verifyStateVersion)
   .action(searchCommand);
+
+program
+  .command('recently-done')  
+  .hook('preAction', verifyStateVersion)
+  .action(recentlyDoneCommand);
+
 
 
 program.parseAsync().catch((err: any) => {

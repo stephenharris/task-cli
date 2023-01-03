@@ -1,77 +1,66 @@
 import chalk from "chalk"
-import { getTasksWithOrdinal, Task, TaskWithOrdinal } from "../lib/tasks";
+import { Task, TaskService } from "../lib/tasks";
 import { Disk } from "../lib/disk";
 
-const localStore = Disk.getStore()
+const taskService = new TaskService(Disk.getStore())
 
-const findTask = (num: number) => {
-    const numInt = parseInt(""+num);
-    return getTasksWithOrdinal(localStore)
-        .then((tasks: TaskWithOrdinal[]) => {
-            return tasks.find((task: TaskWithOrdinal) => task.num === numInt)
-        })
-}
+export const startCommand = (taskNumber: string, options: any, command: any) => {
 
-export const startCommand = (taskNumber: number, options: any, command: any) => {
-
-    return findTask(taskNumber)
+    return taskService.findTask(taskNumber)
         .then((task: Task | undefined) =>{
             if (!task) {
-                chalk.red(`Task ${taskNumber} not found.`)
-                return;
+                throw Error(`Task ${taskNumber} not found.`)
             }
 
             task.status = 'in-progress';
-            return localStore.setObject('todo', task.id, task);
+            return taskService.updateTask(task);
         })
         .then((task: Task) =>{
-            console.log(`Started task ${task.description}`);
+            console.log(`Started task ${task.id.slice(0,6)}: ${task.description}`);
         })
 }
 
-export const stopCommand = (taskId: number, options: any, command: any) => {
+export const stopCommand = (taskId: string, options: any, command: any) => {
 
-    return findTask(taskId)
+    return taskService.findTask(taskId)
         .then((task: Task | undefined) =>{
             if (task === undefined) {
-                chalk.red(`Task ${taskId} not found.`)
-                return;
+                throw Error(`Task ${taskId} not found.`)
             }
             task.status = 'todo';
-            return localStore.setObject('todo', task.id, task);
+            return taskService.updateTask(task);
         })
         .then((task: Task) =>{
-            console.log(`Stopped task ${task.description}`);
+            console.log(`Stopped task ${task.id.slice(0,6)}: ${task.description}`);
         })
 }
 
-export const completeCommand = (taskId: number, options: any, command: any) => {
+export const completeCommand = (taskId: string, options: any, command: any) => {
 
-    return findTask(taskId)
+    return taskService.findTask(taskId)
         .then((task: Task | undefined) =>{
             if (task === undefined) {
-                chalk.red(`Task ${taskId} not found.`)
-                return;
+                throw Error(`Task ${taskId} not found.`);
             }
             task.status = 'complete';
-            return localStore.setObject('todo', task.id, task);
+            return taskService.updateTask(task);
         })
         .then((task: Task) =>{
-            console.log(`Completed task ${task.description}`);
+            console.log(`Completed task ${task.id.slice(0,6)}: ${task.description}`);
         })
 }
 
-export const deleteCommand = (taskId: number, options: any, command: any) => {
+export const deleteCommand = (taskId: string, options: any, command: any) => {
 
-    return findTask(taskId)
+    return taskService.findTask(taskId)
         .then(async (task: Task | undefined) =>{
             if (task === undefined) {
                 chalk.red(`Task ${taskId} not found.`)
                 return;
             }
 
-            await localStore.removeObject('todo', task.id);
+            await taskService.deleteTask(task.id);
 
-            console.log(`Deleted task ${task.description}`);
+            console.log(`Deleted task ${task.id.slice(0,6)}: ${task.description}`);
         })
 }

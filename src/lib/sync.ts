@@ -1,20 +1,13 @@
 import { Task } from "../lib/tasks";
 import { State, clientVersion } from "../lib/state";
 import { upgradeState } from "../lib/upgrade";
+import { deepEqual } from "./util";
 
 export const defaultState = {
     version: 2,
     serial: 1,
     tasks: []
 }
-
-function deepEqual(x: any, y: any): boolean {
-    const ok = Object.keys, tx = typeof x, ty = typeof y;
-    return x && y && tx === 'object' && tx === ty ? (
-      ok(x).length === ok(y).length &&
-        ok(x).every((key: any) => deepEqual(x[key], y[key]))
-    ) : (x === y);
-  }
 
 export function sync(remote: State | {}, cachedState: State | {} | null, localTasks: Task[]) {
 
