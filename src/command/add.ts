@@ -9,7 +9,7 @@ export const addCommand = (description: string, options: any, command: any) => {
     const task = {
         id: id,
         description: description,
-        tags: options.tag ? options.tag.split(',') : null,
+        tags: options.tag ? options.tag.split(',') : [],
         date: options.due ? chrono.parseDate(options.due).toISOString() : null,
         status: "todo"
     }
