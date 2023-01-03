@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { addCommand } from "./command/add";
 import { editCommand } from "./command/edit";
 import { listCommmand } from "./command/list";
+import { recentlyDoneCommand } from "./command/recently-done";
 import { remoteInitCommand } from "./command/remote-init";
 import { searchCommand } from "./command/search";
 import { startCommand, stopCommand, completeCommand, deleteCommand } from "./command/status";
@@ -106,6 +107,12 @@ program
   .argument('searchTerm')
   .hook('preAction', verifyStateVersion)
   .action(searchCommand);
+
+program
+  .command('recently-done')  
+  .hook('preAction', verifyStateVersion)
+  .action(recentlyDoneCommand);
+
 
 
 program.parseAsync().catch((err: any) => {

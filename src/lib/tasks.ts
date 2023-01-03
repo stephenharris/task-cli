@@ -61,8 +61,12 @@ export class TaskService {
     return this.localStore.removeTask(taskId)
   }
 
-  getTasksWithOrdinal(): Promise<TaskWithOrdinal[]> {
+  getTasks(): Promise<Task[]> {
     return this.localStore.getTasks()
+  }
+
+  getTasksWithOrdinal(): Promise<TaskWithOrdinal[]> {
+    return this.getTasks()
       .then((tasks: Task[]) => {
         let ordinal = 1;
         return tasks.map((task: Task): TaskWithOrdinal => {
