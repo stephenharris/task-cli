@@ -111,6 +111,7 @@ program
 program
   .command('recently-done')  
   .hook('preAction', verifyStateVersion)
+  .option('-t, --tag <tag>', 'Tags')
   .action(recentlyDoneCommand);
 
 

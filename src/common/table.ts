@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import moment from "moment";
-import { getTasksWithOrdinal, Task, TaskWithOrdinal } from "../lib/tasks";
+import { Task, TaskWithOrdinal } from "../lib/tasks";
 import Table from "cli-table3";
 
 export const renderTable = (tasks: TaskWithOrdinal[]|Task[]) : Table.Table => {
@@ -22,7 +22,7 @@ export const renderTable = (tasks: TaskWithOrdinal[]|Task[]) : Table.Table => {
                 return chalk.yellow(column)
             }
 
-            if (moment(task.date).isBefore(moment())) {
+            if (task.date && moment(task.date).isBefore(moment())) {
                 return chalk.red(column)
             }
 
