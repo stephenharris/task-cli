@@ -5,6 +5,7 @@ import { stringify } from 'yaml'
 import inquirer from "inquirer"
 import {YAML} from "yaml-schema"
 import { deepEqual } from "../lib/util";
+import moment from "moment";
 
 const taskService = new TaskService(Disk.getStore())
 
@@ -17,7 +18,11 @@ const editTask = (taskDetails: string, taskID: string): Promise<any> => {
         const yaml = new YAML(TaskSchema)
 
         try {
-            const t = yaml.parse(answer["task"])
+            const t = yaml.parse(answer["task"]) as Task
+            if(t.date && !moment(t.date).isValid()) {
+                throw Error(`'${t.date}' is not a valid date`)
+            }
+
             return t;
         } catch (e: any) {
             console.log(chalk.red(`Error editing task: ${e.message}`));
